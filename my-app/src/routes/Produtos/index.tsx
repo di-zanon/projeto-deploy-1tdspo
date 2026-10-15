@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import type { TipoProduto } from "../../types/types";
 import { Link, useNavigate } from "react-router";
-// import ProdutoCard from "../../components/ProdutoCard";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Produtos() {
   //Modificar o título da página;
@@ -17,7 +18,7 @@ export default function Produtos() {
 
     const carregaProdutos = async () => {
       try {
-        const resposta = await fetch("http://localhost:3001/produtos");
+        const resposta = await fetch(API_URL);
 
         if (!resposta.ok) {
           throw new Error(
@@ -25,7 +26,13 @@ export default function Produtos() {
           );
         }
 
-        const data: TipoProduto[] = await resposta.json();
+        const resultado = await resposta.json();
+        const { data, status } = resultado;
+
+        if (status === "error") {
+          throw new Error(`Erro na listagem de produtos: ${status}`);
+        }
+
         console.log(data);
         setProdutos(data);
       } catch (error) {
@@ -77,37 +84,37 @@ export default function Produtos() {
         ))}
       </div> */}
 
-       <table border={1} cellPadding={10} style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                    <tr style={{ backgroundColor: '#2c3e50', color: '#ffffff' }}>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Preço</th>
-                        <th>Estoque</th>
-                        <th>Avatar</th>
-                        <th>Ações</th>
-                    </tr> 
-                </thead>
-                <tbody>
-                    {produtos.map((p) => (
-                        <tr key={p.id}>
-                            <td>{p.id}</td>
-                            <td>{p.nome}</td>
-                            <td>{p.preco}</td>
-                            <td>{p.estoque}</td>
-                            <td><img src={p.avatar} alt={p.nome} width={60} height={60} style={{ objectFit: 'cover' }} /></td>
-                            <td>
-                                <Link to={`/editar-produtos/${p.id}`}>Editar</Link> | <Link to="#" onClick={()=> handleDelete(p.id.toString())}>Excluir</Link>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colSpan={6}>Quantidade de produtos - {produtos.length}</td>
-                    </tr>
-                </tfoot>
-            </table>
+      <table border={1} cellPadding={10} style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr style={{ backgroundColor: '#2c3e50', color: '#ffffff' }}>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Estoque</th>
+            <th>Avatar</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {produtos.map((p) => (
+            <tr key={p.id}>
+              <td>{p.id}</td>
+              <td>{p.nome}</td>
+              <td>{p.preco}</td>
+              <td>{p.estoque}</td>
+              <td><img src={p.avatar} alt={p.nome} width={60} height={60} style={{ objectFit: 'cover' }} /></td>
+              <td>
+                <Link to={`/editar-produtos/${p.id}`}>Editar</Link> | <Link to="#" onClick={() => handleDelete(p.id.toString())}>Excluir</Link>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={6}>Quantidade de produtos - {produtos.length}</td>
+          </tr>
+        </tfoot>
+      </table>
     </main>
   );
 }

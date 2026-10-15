@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router";
 import type { TipoProdutoJ } from "../../types/types";
 import { useForm } from "react-hook-form";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export default function EditarProdutos() {
   //Modificar o título da página;
   document.title = "Editar Produtos";
@@ -10,64 +12,77 @@ export default function EditarProdutos() {
   const navigate = useNavigate();
 
   //Declarando os componentes do hookForm
-  const{register,handleSubmit,reset, formState:{errors}} = useForm<TipoProdutoJ>({
-    defaultValues:{ id: "", nome: "", preco: 0, estoque: 0,avatar: "" },mode:"onChange"});
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<TipoProdutoJ>({
+    defaultValues: { id: "", nome: "", preco: 0, estoque: 0, avatar: "" }, mode: "onChange"
+  });
 
-    //Recuperar o parâmetro da rota através do hook useParams, desestruturando o objeto.
-    const { id } = useParams<{id:string}>();
+  //Recuperar o parâmetro da rota através do hook useParams, desestruturando o objeto.
+  const { id } = useParams<{ id: string }>();
 
-    useEffect(() => {
-        //Simulando a requisição para o backend
+  useEffect(() => {
+    //Simulando a requisição para o backend
 
-        const carregaProduto = async () => {
+    const carregaProduto = async () => {
 
-            try {
-
-                const resposta = await fetch(`http://localhost:3001/produtos/${id}`);
-
-                if (!resposta.ok) {
-                    throw new Error(`Produto não encontrado: ${resposta.status} - ${resposta.statusText}`)
-                }
-
-                const data: TipoProdutoJ = await resposta.json();
-                console.log(data);
-                reset(data);
-                
-
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        carregaProduto();
-
-    }, []);
-
-
-    const handleUpdate = async (data:TipoProdutoJ)=>{
       try {
 
-        const response = await fetch(`http://localhost:3001/produtos/${data.id}` , {
-          method:"PUT",
-          headers:{
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
-        });
+        const resposta = await fetch(`${API_URL}?id=${id}`);
 
-              if (!response.ok) {
-                  throw new Error(`A atualização falhou: ${response.status} - ${response.statusText}`)
-              }
+        if (!resposta.ok) {
+          throw new Error(`Produto não encontrado: ${resposta.status} - ${resposta.statusText}`)
+        }
 
-              //MSG de SUCESSO
-              alert("Atualização realizada com sucesso!");
-              //Redirecionando para a página de produtos
-              navigate("/produtos");
+        const resultado = await resposta.json();
+
+        if (resultado.status === "error") {
+          throw new Error(resultado.message);
+        }
+
+        const dados: TipoProdutoJ = resultado.data;
+
+        console.log(dados);
+        reset(dados);
 
       } catch (error) {
         console.error(error);
       }
     }
+
+    carregaProduto();
+
+  }, []);
+
+
+  const handleUpdate = async (data: TipoProdutoJ) => {
+    try {
+
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify({ action: "PUT", ...data })
+      });
+
+      if (!response.ok) {
+        throw new Error(`A atualização falhou: ${response.status} - ${response.statusText}`)
+      }
+
+      const resultado = await response.json();
+
+      if (resultado.status === "error") {
+        throw new Error(`A atualização falhou: ${resultado.message}`);
+      }
+
+      //MSG de SUCESSO
+      alert("Atualização realizada com sucesso!");
+      //Redirecionando para a página de produtos
+      navigate("/produtos");
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <main>
@@ -78,19 +93,19 @@ export default function EditarProdutos() {
             <legend>Dados do Produto</legend>
             <div>
               <label htmlFor="nomeProduto">Nome Produto </label>
-              <input type="text"  {...register("nome", {required: "Preenchimento do campo é obrigatório!", minLength:{value:3, message:"O campo deve conter no mínimo 3 caracteres!"}} )}/>
-              {errors.nome && <span style={{color:"#ff0000"}}>{errors.nome.message}</span> }
+              <input type="text"  {...register("nome", { required: "Preenchimento do campo é obrigatório!", minLength: { value: 3, message: "O campo deve conter no mínimo 3 caracteres!" } })} />
+              {errors.nome && <span style={{ color: "#ff0000" }}>{errors.nome.message}</span>}
             </div>
             <div>
               <label htmlFor="preco">Preço R$ </label>
-              <input type="number" step={0.1} {...register("preco",{required: "Preenchimento do campo é obrigatório!", min:{value:1,message:"O valor minímo é 1"}})}/>
-              {errors.preco && <span style={{color:"#ff0000"}}>{errors.preco.message}</span> }
-            </div>            
+              <input type="number" step={0.1} {...register("preco", { required: "Preenchimento do campo é obrigatório!", min: { value: 1, message: "O valor minímo é 1" } })} />
+              {errors.preco && <span style={{ color: "#ff0000" }}>{errors.preco.message}</span>}
+            </div>
             <div>
               <label htmlFor="estoque">Estoque </label>
-              <input type="number" step={1} {...register("estoque",{required: "Preenchimento do campo é obrigatório!", min:{value:1,message:"O valor minímo é 1"}})}/>
-              {errors.estoque && <span style={{color:"#ff0000"}}>{errors.estoque.message}</span> }
-            </div>            
+              <input type="number" step={1} {...register("estoque", { required: "Preenchimento do campo é obrigatório!", min: { value: 1, message: "O valor minímo é 1" } })} />
+              {errors.estoque && <span style={{ color: "#ff0000" }}>{errors.estoque.message}</span>}
+            </div>
             <div>
               <button type="submit">Editar</button>
             </div>

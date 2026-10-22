@@ -9,12 +9,12 @@ export interface TipoProduto {
 }
 
 export interface TipoProdutoAll {
-    produto:TipoProduto;
+    produto: TipoProduto;
 }
 
 export type TipoProdutoJ = {
     id: string;
-    nome: string; 
+    nome: string;
     preco: number;
     estoque: number;
     avatar: string;
@@ -22,10 +22,11 @@ export type TipoProdutoJ = {
 
 export type Tema = 'light' | 'dark';
 
-export type LayoutProps = {
-  tema: Tema;
+export type TipoTemaContext = {
+    tema: Tema;
+    alternarTema: () => void;
 };
 
-export type NomeLojaProviderProps = {
-children: ReactNode;
+export type TipoTemaProps = {
+    children: ReactNode;
 }

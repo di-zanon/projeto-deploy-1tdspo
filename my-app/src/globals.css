@@ -2,21 +2,29 @@
 
 @layer base {
 
-    body{
-        @apply bg-gray-900 text-white w-screen;
+    * {
+        box-sizing: border-box;
     }
 
-    .container{
-    @apply bg-gray-900 text-white flex flex-col min-w-screen w-screen h-screen justify-between;
-    
-    & header{
-        @apply bg-gray-700 w-full;
+    body {
+        @apply m-0 min-width-80 font-sans;
     }
-    & main{
-        @apply bg-gray-500 w-full;
+
+    buttons,
+    input {
+        font: inherit;
     }
-    & footer{
-        @apply bg-gray-800 w-full;
+
+    @layer components {
+        .container {
+            @apply flex min-h-screen flex-col;
+            @apply bg-slate-100 text-slate-900;
+            @apply transition-colors duration-300;
+        }
+
+        .container.dark {
+            @apply bg-slate-950 text-slate-100;
+        }
     }
-    }
+
 }

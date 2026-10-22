@@ -9,14 +9,26 @@ export default function Cabecalho() {
   const { tema, alternarTema } = useContext(TemaContext);
 
   return (
-    <header>
-      <h1>mesbla</h1>
-      <Menu />
+    <header className="cabecalho">
+      <div className="cabecalho-conteudo">
 
-      <button type="button" onClick={alternarTema}>
-        {tema === "light" ? <FaMoon /> : <FaSun />}
-        {tema === "light" ? "Tema Escuro" : "Tema Claro"}
-      </button>
+        <div className="marca">
+          <h1>Gerenciador de Produtos</h1>
+          <p>Utensílios em geral</p>
+        </div>
+
+        <Menu />
+
+        <button
+          type="button"
+          className="botao-tema"
+          onClick={alternarTema}
+          aria-label={tema === "light" ? "Ativar tema escuro" : "Ativar tema claro"}>
+          {tema === "light" ? <FaMoon /> : <FaSun />}
+          {tema === "light" ? "Tema Escuro" : "Tema Claro"}
+        </button>
+      </div>
+
     </header>
   )
 }

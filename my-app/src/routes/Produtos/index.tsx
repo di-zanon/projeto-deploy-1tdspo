@@ -83,55 +83,48 @@ export default function Produtos() {
   };
 
   return (
-    <main style={{ padding: "20px" }}>
-      <h2>Produtos</h2>
+    <main className="pagina-produtos">
+      <div className="titulo-pagina">
+        <p>Gerenciamento</p>
+        <h2>Produtos cadastrados</h2>
+      </div>
 
-      <table
-        border={1}
-        cellPadding={10}
-        style={{ width: "100%", borderCollapse: "collapse" }}
-      >
-        <thead>
-          <tr style={{ backgroundColor: "#2c3e50", color: "#ffffff" }}>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Preço</th>
-            <th>Estoque</th>
-            <th>Avatar</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {produtos.map((p) => (
-            <tr key={p.id}>
-              <td>{p.id}</td>
-              <td>{p.nome}</td>
-              <td>{p.preco}</td>
-              <td>{p.estoque}</td>
-              <td>
-                <img
-                  src={p.avatar}
-                  alt={p.nome}
-                  width={60}
-                  height={60}
-                  style={{ objectFit: "cover" }}
-                />
-              </td>
-              <td>
-                <Link to={`/editar-produtos/${p.id}`}>Editar</Link> |{" "}
-                <Link to="#" onClick={() => handleDelete(p.id.toString())}>
-                  Excluir
-                </Link>
-              </td>
+      <div className="painel-tabela-responsiva">
+        <table className="tbProduto">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Preço</th>
+              <th>Estoque</th>
+              <th>Avatar</th>
+              <th>Ações</th>
             </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colSpan={6}>Quantidade de produtos - {produtos.length}</td>
-          </tr>
-        </tfoot>
-      </table>
+          </thead>
+          <tbody>
+            {produtos.map((p) => (
+              <tr key={p.id}>
+                <td>{p.id}</td>
+                <td>{p.nome}</td>
+                <td>{Number(p.preco.toFixed(2)).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</td>
+                <td> <span className="estoque">{p.estoque}</span></td>
+                <td><img className="avatar-produto" src={p.avatar} alt={p.nome} /></td>
+                <td className="acoes">
+                  <Link className="editar" aria-label={`Editar ${p.nome}`} to={`/editar-produtos/${p.id}`}>Editar</Link> |{" "}
+                  <Link className="excluir" aria-label={`Excluir ${p.nome}`} to="#" onClick={() => handleDelete(p.id.toString())}>
+                    Excluir
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colSpan={6}>Quantidade de produtos - {produtos.length}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </main>
   );
 }

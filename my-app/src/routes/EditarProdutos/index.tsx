@@ -85,26 +85,31 @@ export default function EditarProdutos() {
   }
 
   return (
-    <main>
-      <h2>Editar Produtos</h2>
+    <main className="pagina-pagina-formulario">
+
+      <div className="titulo-pagina">
+        <p>Registro Editado</p>
+        <h2>Atualização de produto</h2>
+      </div>
+
       <div>
-        <form onSubmit={handleSubmit(handleUpdate)}>
+        <form className="forms" onSubmit={handleSubmit(handleUpdate)}>
           <fieldset>
             <legend>Dados do Produto</legend>
-            <div>
+            <div className="campo-formulario">
               <label htmlFor="nomeProduto">Nome Produto </label>
               <input type="text"  {...register("nome", { required: "Preenchimento do campo é obrigatório!", minLength: { value: 3, message: "O campo deve conter no mínimo 3 caracteres!" } })} />
-              {errors.nome && <span style={{ color: "#ff0000" }}>{errors.nome.message}</span>}
+              {errors.nome && <span className="mensagem-erro">{errors.nome.message}</span>}
             </div>
-            <div>
+            <div className="campo-formulario">
               <label htmlFor="preco">Preço R$ </label>
               <input type="number" step={0.1} {...register("preco", { required: "Preenchimento do campo é obrigatório!", min: { value: 1, message: "O valor minímo é 1" } })} />
-              {errors.preco && <span style={{ color: "#ff0000" }}>{errors.preco.message}</span>}
+              {errors.preco && <span className="mensagem-erro">{errors.preco.message}</span>}
             </div>
-            <div>
+            <div className="campo-formulario">
               <label htmlFor="estoque">Estoque </label>
               <input type="number" step={1} {...register("estoque", { required: "Preenchimento do campo é obrigatório!", min: { value: 1, message: "O valor minímo é 1" } })} />
-              {errors.estoque && <span style={{ color: "#ff0000" }}>{errors.estoque.message}</span>}
+              {errors.estoque && <span className="mensagem-erro">{errors.estoque.message}</span>}
             </div>
             <div>
               <button type="submit">Editar</button>

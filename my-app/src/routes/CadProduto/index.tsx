@@ -105,29 +105,32 @@ export default function CadProduto() {
   }
 
   return (
-    <main>
-      <h2>Cadastro de Produtos</h2>
+    <main className="pagina-pagina-formulario">
+      <div className="titulo-pagina">
+        <p>Novo Registro</p>
+        <h2>Cadastro de produto</h2>
+      </div>
       <div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form className="forms" onSubmit={handleSubmit(onSubmit)}>
           <fieldset>
             <legend>Dados do Produto</legend>
-            <div>
+            <div className="campo-formulario">
               <label htmlFor="nomeProduto">Nome Produto </label>
               <input type="text"  {...register("nome", { required: "Preenchimento do campo é obrigatório!", minLength: { value: 3, message: "O campo deve conter no mínimo 3 caracteres!" } })} />
-              {errors.nome && <span style={{ color: "#ff0000" }}>{errors.nome.message}</span>}
+              {errors.nome && <span className="mensagem-erro">{errors.nome.message}</span>}
             </div>
-            <div>
+            <div className="campo-formulario">
               <label htmlFor="preco">Preço R$ </label>
               <input type="number" step={0.1} {...register("preco", { required: "Preenchimento do campo é obrigatório!", min: { value: 1, message: "O valor minímo é 1" } })} />
-              {errors.preco && <span style={{ color: "#ff0000" }}>{errors.preco.message}</span>}
+              {errors.preco && <span className="mensagem-erro">{errors.preco.message}</span>}
             </div>
-            <div>
+            <div className="campo-formulario">
               <label htmlFor="estoque">Estoque </label>
               <input type="number" step={1} {...register("estoque", { required: "Preenchimento do campo é obrigatório!", min: { value: 1, message: "O valor minímo é 1" } })} />
-              {errors.estoque && <span style={{ color: "#ff0000" }}>{errors.estoque.message}</span>}
+              {errors.estoque && <span className="mensagem-erro">{errors.estoque.message}</span>}
             </div>
 
-            <div>
+            <div className="campo-formulario">
               <label htmlFor="arquivoImg">Avatar Produto</label>
               <input type="file" accept="image/" onChange={selecionaImagem} disabled={lendoImagem} />
               <input type="hidden" {...register("avatar")} />

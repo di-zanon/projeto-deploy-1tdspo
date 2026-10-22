@@ -17,7 +17,7 @@
 
     @layer components {
         .container {
-            @apply flex min-h-screen flex-col;
+            @apply flex min-h-screen min-w-screen flex-col;
             @apply bg-slate-100 text-slate-900;
             @apply transition-colors duration-300;
         }
